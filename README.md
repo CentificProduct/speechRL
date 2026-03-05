@@ -332,5 +332,4 @@ Research use. Dataset access is subject to individual dataset licenses (see Data
 
 ## Author
 
-Atik Faysal — Department of Chemistry & Biochemistry, Rowan University
-Advisor: Dr. Thomas M. Keck
+Atik Faysal — Research Intern, Centific
