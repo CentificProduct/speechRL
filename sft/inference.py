@@ -21,8 +21,8 @@ from typing import Optional, Any
 
 import numpy as np
 
-from emotion_gsrm.rubric import DimensionName, RubricPromptBuilder, EmotionScores
-from emotion_gsrm.training.dataset import (
+from rubric.init import DimensionName, RubricPromptBuilder, EmotionScores
+from sft.dataset import (
     SYSTEM_PROMPT, INPUT_TEMPLATE, CONTEXT_TEMPLATE,
 )
 
@@ -132,33 +132,40 @@ class EmotionGSRMInference:
                 AutoTokenizer,
                 AutoProcessor,
             )
+            from peft import PeftModel
         except ImportError:
             raise ImportError(
-                "transformers required: pip install transformers"
+                "transformers and peft required: pip install transformers peft"
             )
 
         logger.info(f"Loading model from {self.model_path}")
         dtype = getattr(torch, self.torch_dtype, torch.bfloat16)
 
+        # Read base model path from LoRA adapter config
+        adapter_config = json.loads((self.model_path / "adapter_config.json").read_text())
+        base_model_path = adapter_config["base_model_name_or_path"]
+        logger.info(f"Base model: {base_model_path}")
+
         self._tokenizer = AutoTokenizer.from_pretrained(
-            str(self.model_path),
+            base_model_path,
             trust_remote_code=True,
             padding_side="left",
         )
         if self._tokenizer.pad_token is None:
             self._tokenizer.pad_token = self._tokenizer.eos_token
 
-        self._model = AutoModelForCausalLM.from_pretrained(
-            str(self.model_path),
+        base_model = AutoModelForCausalLM.from_pretrained(
+            base_model_path,
             trust_remote_code=True,
             torch_dtype=dtype,
             device_map=self.device,
         )
+        self._model = PeftModel.from_pretrained(base_model, str(self.model_path))
         self._model.eval()
 
         try:
             self._processor = AutoProcessor.from_pretrained(
-                str(self.model_path), trust_remote_code=True,
+                base_model_path, trust_remote_code=True,
             )
         except Exception:
             self._processor = None
@@ -271,11 +278,7 @@ class EmotionGSRMInference:
             {"role": "user", "content": user_content},
         ]
 
-        if self._processor and hasattr(self._processor, "apply_chat_template"):
-            return self._processor.apply_chat_template(
-                messages, add_generation_prompt=True, tokenize=False,
-            )
-        elif self._tokenizer and hasattr(self._tokenizer, "apply_chat_template"):
+        if self._tokenizer and hasattr(self._tokenizer, "apply_chat_template"):
             return self._tokenizer.apply_chat_template(
                 messages, add_generation_prompt=True, tokenize=False,
             )
@@ -289,6 +292,7 @@ class EmotionGSRMInference:
     def _generate_k_samples(self, prompt: str, audio_path: str) -> list[str]:
         """Generate K independent samples from the model."""
         import torch
+        from tqdm import tqdm
 
         inputs = self._tokenizer(
             prompt, return_tensors="pt",
@@ -297,46 +301,22 @@ class EmotionGSRMInference:
 
         responses = []
 
-        if self.batch_k:
-            batch_input_ids = inputs["input_ids"].repeat(self.k, 1)
-            batch_attention = inputs["attention_mask"].repeat(self.k, 1)
-
+        for _ in tqdm(range(self.k), desc="K samples", leave=False):
             with torch.no_grad():
-                outputs = self._model.generate(
-                    input_ids=batch_input_ids,
-                    attention_mask=batch_attention,
+                output = self._model.generate(
+                    **inputs,
                     max_new_tokens=self.max_new_tokens,
                     temperature=self.temperature,
                     top_p=self.top_p,
                     do_sample=True,
-                    num_return_sequences=1,
                     pad_token_id=self._tokenizer.pad_token_id,
                 )
-
             input_len = inputs["input_ids"].shape[1]
-            for i in range(self.k):
-                generated = outputs[i, input_len:]
-                text = self._tokenizer.decode(
-                    generated, skip_special_tokens=True
-                )
-                responses.append(text)
-        else:
-            for _ in range(self.k):
-                with torch.no_grad():
-                    output = self._model.generate(
-                        **inputs,
-                        max_new_tokens=self.max_new_tokens,
-                        temperature=self.temperature,
-                        top_p=self.top_p,
-                        do_sample=True,
-                        pad_token_id=self._tokenizer.pad_token_id,
-                    )
-                input_len = inputs["input_ids"].shape[1]
-                generated = output[0, input_len:]
-                text = self._tokenizer.decode(
-                    generated, skip_special_tokens=True
-                )
-                responses.append(text)
+            generated = output[0, input_len:]
+            text = self._tokenizer.decode(
+                generated, skip_special_tokens=True
+            )
+            responses.append(text)
 
         return responses
 

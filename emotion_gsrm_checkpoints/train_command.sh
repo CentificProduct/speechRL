@@ -3,7 +3,7 @@
 # Generated: 2026-03-09 14:02:47
 
 swift sft \
-  --model Qwen/Qwen2.5-Omni-7B \
+  --model Qwen/Qwen2.5-7B-Instruct \
   --model_revision main \
   --torch_dtype bfloat16 \
   --dataset emotion_gsrm_checkpoints/swift_train.jsonl \
