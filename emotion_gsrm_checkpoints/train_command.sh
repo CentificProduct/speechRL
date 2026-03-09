@@ -3,7 +3,7 @@
 # Generated: 2026-03-09 14:02:47
 
 swift sft \
-  --model Qwen/Qwen2.5-Omni-7B-Instruct \
+  --model Qwen/Qwen2.5-Omni-7B \
   --model_revision main \
   --torch_dtype bfloat16 \
   --dataset emotion_gsrm_checkpoints/swift_train.jsonl \
@@ -27,4 +27,4 @@ swift sft \
   --lora_rank 64 \
   --lora_alpha 128 \
   --lora_dropout 0.05 \
-  --target_modules all
+  --target_modules all-linear

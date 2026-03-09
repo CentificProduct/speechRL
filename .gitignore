@@ -2,6 +2,8 @@
 datasets/
 *.data
 
+emotion_gsrm_checkpoints/v*
+
 # Python
 __pycache__/
 *.py[cod]
