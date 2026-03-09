@@ -205,11 +205,14 @@ class JudgmentSynthesizer:
 
     @property
     def client(self):
-        """Lazy-initialize OpenAI client."""
+        """Lazy-initialize OpenAI-compatible Ollama client."""
         if self._client is None:
             try:
                 from openai import OpenAI
-                self._client = OpenAI(api_key=self.api_key)
+                self._client = OpenAI(
+                    api_key="ollama",  # Dummy key for local Ollama
+                    base_url="http://localhost:11434/v1",
+                )
             except ImportError:
                 raise ImportError(
                     "openai package required. Install with: pip install openai"

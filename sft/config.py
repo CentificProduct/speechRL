@@ -105,7 +105,7 @@ class TrainingConfig:
             "model_revision": self.model_revision,
             "trust_remote_code": self.trust_remote_code,
             "torch_dtype": self.torch_dtype,
-            "train_dataset": self.train_data_path,
+            "dataset": self.train_data_path,
             "max_length": self.max_length,
             "learning_rate": self.learning_rate,
             "num_train_epochs": self.num_epochs,
@@ -153,8 +153,11 @@ class TrainingConfig:
         parts = ["swift sft"]
         for key, value in args.items():
             if isinstance(value, bool):
+                # SWIFT CLI uses --flag or --flag=false format, not --flag true
                 if value:
                     parts.append(f"  --{key}")
+                else:
+                    parts.append(f"  --{key}=false")
             elif isinstance(value, list):
                 parts.append(f"  --{key} {' '.join(str(v) for v in value)}")
             else:

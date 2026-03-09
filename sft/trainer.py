@@ -199,9 +199,10 @@ class EmotionGSRMTrainer:
             output_lines = []
             for line in iter(process.stdout.readline, ""):
                 line = line.rstrip()
+                if not line:
+                    continue
                 output_lines.append(line)
-                if any(kw in line for kw in ["loss", "epoch", "step", "eval"]):
-                    logger.info(f"[SWIFT] {line}")
+                logger.info(f"[SWIFT] {line}")
 
             process.wait()
             elapsed = time.time() - start_time

@@ -214,13 +214,30 @@ class EvidenceGenerator:
         self._call_count = 0
         self._last_call_time = 0.0
 
+    # @property
+    # def client(self):
+    #     """Lazy-initialize OpenAI client."""
+    #     if self._client is None:
+    #         try:
+    #             from openai import OpenAI
+    #             self._client = OpenAI(api_key=self.api_key)
+    #         except ImportError:
+    #             raise ImportError(
+    #                 "openai package required. Install with: "
+    #                 "pip install openai"
+    #             )
+    #     return self._client
+
     @property
     def client(self):
-        """Lazy-initialize OpenAI client."""
+        """Lazy-initialize OpenAI-compatible Ollama client."""
         if self._client is None:
             try:
                 from openai import OpenAI
-                self._client = OpenAI(api_key=self.api_key)
+                self._client = OpenAI(
+                    api_key="ollama",  # Dummy key for local Ollama
+                    base_url="http://localhost:11434/v1",
+                )
             except ImportError:
                 raise ImportError(
                     "openai package required. Install with: "
