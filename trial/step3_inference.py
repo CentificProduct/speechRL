@@ -42,7 +42,7 @@ def main():
     parser.add_argument("--model_path", type=str, 
         default="/home/azureuser/atik/speechRL/emotion_gsrm_checkpoints/v12-20260309-183522/checkpoint-100")
     parser.add_argument("--ravdess_dir", type=str, default="/home/azureuser/atik/speechRL/datasets/RAVDESS")
-    parser.add_argument("--k", type=int, default=16)
+    parser.add_argument("--k", type=int, default=8)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--top_p", type=float, default=0.6)
     parser.add_argument("--output_path", type=str, default="./ravdess_results.jsonl")

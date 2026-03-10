@@ -11988,3 +11988,238 @@ Next: python step2_train.py --data_path ./ravdess_cot_output/sft_training_data.j
     result = result + lora_B(lora_A(dropout(x))) * scaling
     ^^^^^^
 KeyboardInterrupt
+2026-03-10 15:48:03,142 [INFO] step3: Loading RAVDESS test split (Actors 23-24)
+2026-03-10 15:48:03,142 [INFO] dataloader.base: Loading ravdess split=test from /home/azureuser/atik/speechRL/datasets/RAVDESS
+2026-03-10 15:48:03,144 [INFO] dataloader.ravdess: RAVDESS: loaded 120 recordings from 2 actors
+2026-03-10 15:48:03,144 [INFO] dataloader.base: Loaded 120 samples from ravdess
+2026-03-10 15:48:03,144 [INFO] step3: Test samples: 120
+2026-03-10 15:48:03,145 [INFO] step3: Loading model from /home/azureuser/atik/speechRL/emotion_gsrm_checkpoints/v12-20260309-183522/checkpoint-100
+2026-03-10 15:48:07,965 [INFO] numexpr.utils: Note: NumExpr detected 24 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2026-03-10 15:48:07,966 [INFO] numexpr.utils: NumExpr defaulting to 16 threads.
+2026-03-10 15:48:08,857 [INFO] sft.inference: Loading model from /home/azureuser/atik/speechRL/emotion_gsrm_checkpoints/v12-20260309-183522/checkpoint-100
+2026-03-10 15:48:08,857 [INFO] sft.inference: Base model: Qwen/Qwen2.5-7B-Instruct
+`torch_dtype` is deprecated! Use `dtype` instead!
+2026-03-10 15:48:09,797 [INFO] accelerate.utils.modeling: We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:02,  1.48it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:01<00:01,  1.39it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:02<00:00,  1.35it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.37it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.38it/s]
+2026-03-10 15:48:20,341 [INFO] sft.inference: Model loaded successfully
+2026-03-10 15:48:20,341 [INFO] step3: [1/50] 03-01-01-01-01-01-23
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [02:08<14:57, 128.21s/it]K samples:  25%|██▌       | 2/8 [04:16<12:49, 128.20s/it]K samples:  38%|███▊      | 3/8 [06:23<10:39, 127.89s/it]K samples:  50%|█████     | 4/8 [08:31<08:30, 127.63s/it]K samples:  62%|██████▎   | 5/8 [10:38<06:22, 127.37s/it]K samples:  75%|███████▌  | 6/8 [12:46<04:15, 127.87s/it]K samples:  88%|████████▊ | 7/8 [14:57<02:08, 128.70s/it]K samples: 100%|██████████| 8/8 [17:07<00:00, 129.12s/it]                                                         2026-03-10 16:05:27,686 [INFO] step3: [2/50] 03-01-01-01-01-02-23
+  03-01-01-01-01-01-23: emotion=neutral, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [02:06<14:48, 126.94s/it]K samples:  25%|██▌       | 2/8 [04:13<12:41, 126.96s/it]K samples:  38%|███▊      | 3/8 [06:22<10:37, 127.49s/it]K samples:  50%|█████     | 4/8 [08:29<08:30, 127.54s/it]K samples:  62%|██████▎   | 5/8 [10:37<06:22, 127.66s/it]K samples:  75%|███████▌  | 6/8 [12:44<04:15, 127.53s/it]K samples:  88%|████████▊ | 7/8 [14:52<02:07, 127.48s/it]K samples: 100%|██████████| 8/8 [17:00<00:00, 127.65s/it]                                                         2026-03-10 16:22:27,880 [INFO] step3: [3/50] 03-01-01-01-02-01-23
+  03-01-01-01-01-02-23: emotion=neutral, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [02:04<14:31, 124.54s/it]K samples:  25%|██▌       | 2/8 [04:04<12:12, 122.09s/it]K samples:  38%|███▊      | 3/8 [06:04<10:05, 121.02s/it]K samples:  50%|█████     | 4/8 [08:03<08:00, 120.20s/it]K samples:  62%|██████▎   | 5/8 [10:03<06:00, 120.20s/it]K samples:  75%|███████▌  | 6/8 [12:02<03:59, 119.56s/it]K samples:  88%|████████▊ | 7/8 [14:00<01:59, 119.11s/it]K samples: 100%|██████████| 8/8 [15:57<00:00, 118.57s/it]                                                         2026-03-10 16:38:25,597 [INFO] step3: [4/50] 03-01-01-01-02-02-23
+  03-01-01-01-02-01-23: emotion=neutral, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:55<13:29, 115.67s/it]K samples:  25%|██▌       | 2/8 [03:51<11:35, 115.97s/it]K samples:  38%|███▊      | 3/8 [05:47<09:39, 116.00s/it]K samples:  50%|█████     | 4/8 [07:43<07:43, 115.91s/it]K samples:  62%|██████▎   | 5/8 [09:39<05:47, 115.81s/it]K samples:  75%|███████▌  | 6/8 [11:35<03:51, 115.97s/it]K samples:  88%|████████▊ | 7/8 [13:31<01:56, 116.09s/it]K samples: 100%|██████████| 8/8 [15:28<00:00, 116.23s/it]                                                         2026-03-10 16:53:54,035 [INFO] step3: [5/50] 03-01-02-01-01-01-23
+  03-01-01-01-02-02-23: emotion=neutral, intensity=normal
+    emotional_intensity: 3.12 (std=0.331)
+    emotional_appropriateness: 3.12 (std=0.331)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:36, 116.67s/it]K samples:  25%|██▌       | 2/8 [03:53<11:41, 116.89s/it]K samples:  38%|███▊      | 3/8 [05:50<09:43, 116.64s/it]K samples:  50%|█████     | 4/8 [07:46<07:46, 116.56s/it]K samples:  62%|██████▎   | 5/8 [09:43<05:50, 116.68s/it]K samples:  75%|███████▌  | 6/8 [11:39<03:53, 116.56s/it]K samples:  88%|████████▊ | 7/8 [13:35<01:56, 116.43s/it]K samples: 100%|██████████| 8/8 [15:32<00:00, 116.43s/it]                                                         2026-03-10 17:09:26,347 [INFO] step3: [6/50] 03-01-02-01-01-02-23
+  03-01-02-01-01-01-23: emotion=calm, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:32, 116.04s/it]K samples:  25%|██▌       | 2/8 [03:51<11:33, 115.56s/it]K samples:  38%|███▊      | 3/8 [05:46<09:37, 115.49s/it]K samples:  50%|█████     | 4/8 [07:41<07:41, 115.29s/it]K samples:  62%|██████▎   | 5/8 [09:37<05:46, 115.48s/it]K samples:  75%|███████▌  | 6/8 [11:34<03:51, 115.92s/it]K samples:  88%|████████▊ | 7/8 [13:30<01:56, 116.10s/it]K samples: 100%|██████████| 8/8 [15:26<00:00, 115.87s/it]                                                         2026-03-10 17:24:52,426 [INFO] step3: [7/50] 03-01-02-01-02-01-23
+  03-01-02-01-01-02-23: emotion=calm, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:55<13:27, 115.42s/it]K samples:  25%|██▌       | 2/8 [03:51<11:34, 115.75s/it]K samples:  38%|███▊      | 3/8 [05:47<09:40, 116.00s/it]K samples:  50%|█████     | 4/8 [07:43<07:43, 115.99s/it]K samples:  62%|██████▎   | 5/8 [09:39<05:47, 115.78s/it]K samples:  75%|███████▌  | 6/8 [11:36<03:52, 116.18s/it]K samples:  88%|████████▊ | 7/8 [13:32<01:56, 116.30s/it]K samples: 100%|██████████| 8/8 [15:28<00:00, 116.32s/it]                                                         2026-03-10 17:40:21,365 [INFO] step3: [8/50] 03-01-02-01-02-02-23
+  03-01-02-01-02-01-23: emotion=calm, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:35, 116.53s/it]K samples:  25%|██▌       | 2/8 [03:52<11:38, 116.44s/it]K samples:  38%|███▊      | 3/8 [05:49<09:41, 116.37s/it]K samples:  50%|█████     | 4/8 [07:45<07:45, 116.34s/it]K samples:  62%|██████▎   | 5/8 [09:41<05:48, 116.12s/it]K samples:  75%|███████▌  | 6/8 [11:38<03:52, 116.37s/it]K samples:  88%|████████▊ | 7/8 [13:34<01:56, 116.40s/it]K samples: 100%|██████████| 8/8 [15:31<00:00, 116.42s/it]                                                         2026-03-10 17:55:52,373 [INFO] step3: [9/50] 03-01-02-02-01-01-23
+  03-01-02-01-02-02-23: emotion=calm, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:55<13:31, 115.95s/it]K samples:  25%|██▌       | 2/8 [03:52<11:36, 116.01s/it]K samples:  38%|███▊      | 3/8 [05:48<09:40, 116.09s/it]K samples:  50%|█████     | 4/8 [07:44<07:45, 116.34s/it]K samples:  62%|██████▎   | 5/8 [09:41<05:49, 116.42s/it]K samples:  75%|███████▌  | 6/8 [11:37<03:52, 116.22s/it]K samples:  88%|████████▊ | 7/8 [13:33<01:56, 116.23s/it]K samples: 100%|██████████| 8/8 [15:28<00:00, 115.96s/it]                                                         2026-03-10 18:11:21,323 [INFO] step3: [10/50] 03-01-02-02-01-02-23
+  03-01-02-02-01-01-23: emotion=calm, intensity=strong
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:32, 116.14s/it]K samples:  25%|██▌       | 2/8 [03:52<11:37, 116.32s/it]K samples:  38%|███▊      | 3/8 [05:48<09:41, 116.23s/it]K samples:  50%|█████     | 4/8 [07:45<07:45, 116.37s/it]K samples:  62%|██████▎   | 5/8 [09:41<05:48, 116.27s/it]K samples:  75%|███████▌  | 6/8 [11:37<03:52, 116.36s/it]K samples:  88%|████████▊ | 7/8 [13:34<01:56, 116.44s/it]K samples: 100%|██████████| 8/8 [15:31<00:00, 116.62s/it]                                                         2026-03-10 18:26:52,867 [INFO] step3: [11/50] 03-01-02-02-02-01-23
+  03-01-02-02-01-02-23: emotion=calm, intensity=strong
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:34, 116.33s/it]K samples:  25%|██▌       | 2/8 [03:52<11:36, 116.17s/it]K samples:  38%|███▊      | 3/8 [05:48<09:41, 116.26s/it]K samples:  50%|█████     | 4/8 [07:44<07:44, 116.24s/it]K samples:  62%|██████▎   | 5/8 [09:41<05:48, 116.32s/it]K samples:  75%|███████▌  | 6/8 [11:37<03:52, 116.28s/it]K samples:  88%|████████▊ | 7/8 [13:34<01:56, 116.53s/it]K samples: 100%|██████████| 8/8 [15:31<00:00, 116.70s/it]                                                         2026-03-10 18:42:24,599 [INFO] step3: [12/50] 03-01-02-02-02-02-23
+  03-01-02-02-02-01-23: emotion=calm, intensity=strong
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:55<13:31, 115.95s/it]K samples:  25%|██▌       | 2/8 [03:51<11:34, 115.74s/it]K samples:  38%|███▊      | 3/8 [05:48<09:40, 116.12s/it]K samples:  50%|█████     | 4/8 [07:43<07:43, 115.95s/it]K samples:  62%|██████▎   | 5/8 [09:39<05:47, 115.95s/it]K samples:  75%|███████▌  | 6/8 [11:36<03:52, 116.36s/it]K samples:  88%|████████▊ | 7/8 [13:33<01:56, 116.36s/it]K samples: 100%|██████████| 8/8 [15:30<00:00, 116.52s/it]                                                         2026-03-10 18:57:54,728 [INFO] step3: [13/50] 03-01-03-01-01-01-23
+  03-01-02-02-02-02-23: emotion=calm, intensity=strong
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:37, 116.74s/it]K samples:  25%|██▌       | 2/8 [03:53<11:39, 116.59s/it]K samples:  38%|███▊      | 3/8 [05:49<09:42, 116.53s/it]K samples:  50%|█████     | 4/8 [07:46<07:46, 116.59s/it]K samples:  62%|██████▎   | 5/8 [09:42<05:49, 116.51s/it]K samples:  75%|███████▌  | 6/8 [11:39<03:52, 116.43s/it]K samples:  88%|████████▊ | 7/8 [13:35<01:56, 116.36s/it]K samples: 100%|██████████| 8/8 [15:31<00:00, 116.23s/it]                                                         2026-03-10 19:13:25,892 [INFO] step3: [14/50] 03-01-03-01-01-02-23
+  03-01-03-01-01-01-23: emotion=happy, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:56<13:36, 116.62s/it]K samples:  25%|██▌       | 2/8 [03:54<11:42, 117.15s/it]K samples:  38%|███▊      | 3/8 [05:50<09:43, 116.69s/it]K samples:  50%|█████     | 4/8 [07:47<07:47, 116.83s/it]K samples:  62%|██████▎   | 5/8 [09:44<05:50, 116.81s/it]K samples:  75%|███████▌  | 6/8 [11:40<03:53, 116.52s/it]K samples:  88%|████████▊ | 7/8 [13:37<01:56, 116.75s/it]K samples: 100%|██████████| 8/8 [15:34<00:00, 116.97s/it]                                                         2026-03-10 19:29:00,611 [INFO] step3: [15/50] 03-01-03-01-02-01-23
+  03-01-03-01-01-02-23: emotion=happy, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [01:22<09:37, 82.47s/it]K samples:  25%|██▌       | 2/8 [03:19<10:17, 102.91s/it]K samples:  38%|███▊      | 3/8 [05:15<09:04, 108.86s/it]K samples:  50%|█████     | 4/8 [07:12<07:27, 111.96s/it]K samples:  62%|██████▎   | 5/8 [09:08<05:40, 113.61s/it]K samples:  75%|███████▌  | 6/8 [11:06<03:49, 114.92s/it]K samples:  88%|████████▊ | 7/8 [13:05<01:56, 116.24s/it]K samples: 100%|██████████| 8/8 [15:05<00:00, 117.44s/it]                                                         2026-03-10 19:44:05,925 [INFO] step3: [16/50] 03-01-03-01-02-02-23
+  03-01-03-01-02-01-23: emotion=happy, intensity=normal
+    emotional_intensity: 3.00 (std=0.000)
+    emotional_appropriateness: 3.00 (std=0.000)
+    emotional_consistency: 3.00 (std=0.000)
+    valence_accuracy: 3.00 (std=0.000)
+    arousal_accuracy: 3.00 (std=0.000)
+    transition_smoothness: 3.00 (std=0.000)
+    overall_emotional_quality: 3.00 (std=0.000)
+K samples:   0%|          | 0/8 [00:00<?, ?it/s]K samples:  12%|█▎        | 1/8 [02:00<14:06, 120.92s/it]                                                         Traceback (most recent call last):
+  File "/home/azureuser/atik/speechRL/trial/step3_inference.py", line 124, in <module>
+    main()
+  File "/home/azureuser/atik/speechRL/trial/step3_inference.py", line 83, in main
+    result = engine.predict(
+             ^^^^^^^^^^^^^^^
+  File "/home/azureuser/atik/speechRL/sft/inference.py", line 207, in predict
+    k_responses = self._generate_k_samples(prompt, audio_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/atik/speechRL/sft/inference.py", line 306, in _generate_k_samples
+    output = self._model.generate(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/peft/peft_model.py", line 2048, in generate
+    outputs = self.base_model.generate(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/generation/utils.py", line 2566, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/generation/utils.py", line 2789, in _sample
+    outputs = model_forward(**model_inputs, return_dict=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 449, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/utils/generic.py", line 1072, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 384, in forward
+    hidden_states = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 234, in forward
+    hidden_states, _ = self.self_attn(
+                       ^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 153, in forward
+    query_states = self.q_proj(hidden_states).view(hidden_shape).transpose(1, 2)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureuser/.local/lib/python3.12/site-packages/peft/tuners/lora/layer.py", line 818, in forward
+    result = result.to(torch_result_dtype)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
