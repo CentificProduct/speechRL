@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import argparse
 import json
-import logging
+import logging    
 import sys
 import time
 from pathlib import Path
@@ -40,13 +40,13 @@ logger = logging.getLogger("step3")
 def main():
     parser = argparse.ArgumentParser(description="Emotion-GSRM inference")
     parser.add_argument("--model_path", type=str, 
-        default="/home/azureuser/atik/speechRL/emotion_gsrm_checkpoints/v10-20260309-153511/checkpoint-10")
+        default="/home/azureuser/atik/speechRL/emotion_gsrm_checkpoints/v12-20260309-183522/checkpoint-100")
     parser.add_argument("--ravdess_dir", type=str, default="/home/azureuser/atik/speechRL/datasets/RAVDESS")
-    parser.add_argument("--k", type=int, default=4)
+    parser.add_argument("--k", type=int, default=16)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--top_p", type=float, default=0.6)
     parser.add_argument("--output_path", type=str, default="./ravdess_results.jsonl")
-    parser.add_argument("--max_test", type=int, default=10)
+    parser.add_argument("--max_test", type=int, default=50)
     args = parser.parse_args()
 
     from dataloader.ravdess import RAVDESSDataset

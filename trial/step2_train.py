@@ -41,7 +41,7 @@ def main():
                         default="/home/azureuser/atik/speechRL/ravdess_cot_output/sft_training_data.jsonl",
                         help="Path to sft_training_data.jsonl from Step 1")
     parser.add_argument("--num_gpus", type=int, default=1)
-    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--lr", type=float, default=2e-5)
     parser.add_argument("--lora_rank", type=int, default=64)
     parser.add_argument("--batch_size", type=int, default=4,

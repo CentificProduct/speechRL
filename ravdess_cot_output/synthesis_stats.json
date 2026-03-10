@@ -1,12 +1,12 @@
 {
-  "n_samples": 10,
-  "n_processed": 10,
+  "n_samples": 1200,
+  "n_processed": 1200,
   "n_failed": 0,
   "success_rate": 1.0,
   "score_statistics": {
     "emotional_intensity": {
-      "mean": 3.2,
-      "std": 0.39999999999999997,
+      "mean": 3.46625,
+      "std": 0.49865078378226446,
       "min": 3.0,
       "max": 4.0
     },

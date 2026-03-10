@@ -391,6 +391,7 @@ class EmotionGSRMTrainer:
         logger.warning("Custom training not yet implemented")
         return {"status": "not_implemented"}
 
+    # ---- Post-training utilities ----
     # ---- Utilities ----
 
     def prepare_data_only(self) -> Path:

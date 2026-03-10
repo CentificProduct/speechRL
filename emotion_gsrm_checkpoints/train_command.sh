@@ -1,15 +1,16 @@
 #!/bin/bash
 # Emotion-GSRM Training Command
-# Generated: 2026-03-09 14:02:47
+# Generated: 2026-03-10 15:24:23
 
 swift sft \
   --model Qwen/Qwen2.5-7B-Instruct \
   --model_revision main \
+  --trust_remote_code true \
   --torch_dtype bfloat16 \
   --dataset emotion_gsrm_checkpoints/swift_train.jsonl \
   --max_length 4096 \
   --learning_rate 2e-05 \
-  --num_train_epochs 10 \
+  --num_train_epochs 100 \
   --per_device_train_batch_size 4 \
   --gradient_accumulation_steps 8 \
   --warmup_ratio 0.05 \
@@ -23,8 +24,10 @@ swift sft \
   --save_total_limit 3 \
   --logging_steps 10 \
   --bf16 true \
-  --tuner_type lora \
+  --sft_type lora \
   --lora_rank 64 \
   --lora_alpha 128 \
   --lora_dropout 0.05 \
-  --target_modules all-linear
+  --lora_target_modules ALL \
+  --val_dataset emotion_gsrm_checkpoints/val_swift_train.jsonl \
+  --eval_strategy epoch

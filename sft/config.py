@@ -38,7 +38,7 @@ class TrainingConfig:
     """
 
     # ---- Model ----
-    model_name: str = "Qwen/Qwen2.5-Omni-7B"
+    model_name: str = "Qwen/Qwen2.5-7B-Instruct"
     model_revision: str = "main"
     trust_remote_code: bool = True
     torch_dtype: str = "bfloat16"
@@ -153,11 +153,12 @@ class TrainingConfig:
         parts = ["swift sft"]
         for key, value in args.items():
             if isinstance(value, bool):
-                # SWIFT CLI uses --flag or --flag=false format, not --flag true
-                if value:
-                    parts.append(f"  --{key}")
-                else:
-                    parts.append(f"  --{key}=false")
+                # # SWIFT CLI uses --flag or --flag=false format, not --flag true
+                # if value:
+                #     parts.append(f"  --{key}")
+                # else:
+                #     parts.append(f"  --{key}=false")
+                parts.append(f"  --{key} {str(value).lower()}")
             elif isinstance(value, list):
                 parts.append(f"  --{key} {' '.join(str(v) for v in value)}")
             else:

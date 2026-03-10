@@ -44,7 +44,7 @@ logger = logging.getLogger("step1")
 def main():
     parser = argparse.ArgumentParser(description="CoT synthesis with RAVDESS")
     parser.add_argument("--ravdess_dir", type=str, default='/home/azureuser/atik/speechRL/datasets/RAVDESS')
-    parser.add_argument("--max_samples", type=int, default=10)
+    parser.add_argument("--max_samples", type=int, default=1280)
     parser.add_argument("--batch", action="store_true", help="Batch evidence mode")
     parser.add_argument("--output_dir", type=str, default="./ravdess_cot_output")
     parser.add_argument("--api_key", type=str, default="ollama")
