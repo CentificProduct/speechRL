@@ -25,19 +25,19 @@ Raw Audio ──► Acoustic Feature Extraction ──► Speaker Normalization 
                                                                               ▼
                                                               ┌───────────────────────┐
 Transcript + Context ──────────────────────────────────────►  │  Stage 1: Evidence Log │
-                                                              │  (GPT-4o teacher)      │
+                                                              │  (Mistral teacher)     │
                                                               └───────────┬───────────┘
                                                                           │
                                                                           ▼
                                                               ┌───────────────────────┐
                                             Oracle Scores ──► │  Stage 2: Judgment CoT │
-                                                              │  (GPT-4o teacher)      │
+                                                              │  (Mistral teacher)     │
                                                               └───────────┬───────────┘
                                                                           │
                                                                           ▼
                                                               ┌───────────────────────┐
                                                               │  SFT Fine-tuning       │
-                                                              │  Qwen2.5-Omni-7B      │
+                                                              │  Qwen2.5-7B-Instruct  │
                                                               └───────────┬───────────┘
                                                                           │
                                                                           ▼
@@ -46,7 +46,7 @@ Transcript + Context ───────────────────�
                                                               └───────────────────────┘
 ```
 
-**Training:** GPT-4o generates CoT reasoning from acoustic features + transcripts. The student model learns to replicate this reasoning directly from raw audio.
+**Training:** Mistral generates CoT reasoning from acoustic features + transcripts. The student model learns to replicate this reasoning directly from raw audio.
 
 **Inference:** The student model takes raw audio, generates K=16 independent CoT responses at temperature 1.0 / top-p 0.6, and averages the parsed scores.
 
@@ -239,8 +239,8 @@ All hyperparameters follow the proposal specification:
 
 | Parameter | Value |
 |-----------|-------|
-| Student model | Qwen2.5-Omni-7B |
-| Teacher model | GPT-4o |
+| Student model | Qwen2.5-7B-Instruct |
+| Teacher model | Mistral |
 | Learning rate | 2×10⁻⁵ |
 | Effective batch size | 32 (4 per device × 8 grad accumulation) |
 | Epochs | 10 |
@@ -266,7 +266,7 @@ All hyperparameters follow the proposal specification:
 | Evidence structure | Naturalness cues | Emotion-specific: context, cues, alignment, strengths, issues |
 | Data | Proprietary custom collection | 4 public datasets |
 | Conversational context | Not used | 2–3 preceding turns |
-| Student model | Qwen2-Audio-7B | Qwen2.5-Omni-7B |
+| Student model | Qwen2-Audio-7B | Qwen2.5-7B-Instruct |
 | Additional metrics | — | UAR, confusion matrices, systematic ablations |
 
 ---

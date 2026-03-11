@@ -2,7 +2,7 @@
 Emotion-GSRM: Training Configuration
 ======================================
 All hyperparameters from the proposal:
-  - Model: Qwen2.5-Omni-7B
+  - Model: Qwen2.5-7B-Instruct
   - Data: 5K-7K CoT synthesis samples
   - LR: 2x10^-5
   - Batch size: 32

@@ -2,7 +2,7 @@
 """
 Emotion-GSRM: Step 2 — SFT Training
 ======================================
-Fine-tunes Qwen2.5-Omni-7B on synthesized CoT data.
+Fine-tunes Qwen2.5-7B-Instruct on synthesized CoT data.
 
 Usage:
     python step2_train.py --data_path ./meld_cot_output/sft_training_data.jsonl

@@ -2,7 +2,7 @@
 """
 Emotion-GSRM: Step 1 — CoT Synthesis with RAVDESS
 =====================================================
-Generates chain-of-thought training data using GPT-4o as teacher.
+Generates chain-of-thought training data using Mistral as teacher.
 
 Usage:
     export OPENAI_API_KEY=sk-...
@@ -15,7 +15,7 @@ Options:
 
 Cost estimate:
     ~100 samples with per-dimension evidence = ~700 Stage 1 calls + 100 Stage 2 calls
-    At GPT-4o pricing (~$2.50/1M input, $10/1M output), expect ~$5-10 for 100 samples
+    At Mistral pricing (~$2.50/1M input, $10/1M output), expect ~$5-10 for 100 samples
     Use --batch mode to cut Stage 1 cost by ~5x
 """
 
@@ -78,7 +78,7 @@ def main():
     # Configure pipeline
     config = PipelineConfig(
         api_key=api_key,
-        # teacher_model="gpt-4o",
+        # teacher_model="mistral",
         teacher_model="mistral",
         stage1_temperature=0.3,
         stage2_temperature=0.4,
