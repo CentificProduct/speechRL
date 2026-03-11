@@ -193,6 +193,7 @@ class EmotionGSRMTrainer:
                 stderr=subprocess.STDOUT,
                 text=True,
                 bufsize=1,
+                cwd=str(Path(self.config.output_dir)),
             )
 
             # Stream output

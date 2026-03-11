@@ -5,7 +5,7 @@ Emotion-GSRM: Step 2 — SFT Training
 Fine-tunes Qwen2.5-Omni-7B on synthesized CoT data.
 
 Usage:
-    python step2_train.py --data_path ./ravdess_cot_output/sft_training_data.jsonl
+    python step2_train.py --data_path ./meld_cot_output/sft_training_data.jsonl
 
 Options:
     --num_gpus N        Number of GPUs (default: 1)
@@ -38,7 +38,7 @@ logger = logging.getLogger("step2")
 def main():
     parser = argparse.ArgumentParser(description="SFT training for Emotion-GSRM")
     parser.add_argument("--data_path", type=str, 
-                        default="/home/azureuser/atik/speechRL/ravdess_cot_output/sft_training_data.jsonl",
+                        default="/home/azureuser/atik/speechRL_backup/meld_cot_output/sft_training_data.jsonl",
                         help="Path to sft_training_data.jsonl from Step 1")
     parser.add_argument("--num_gpus", type=int, default=1)
     parser.add_argument("--epochs", type=int, default=100)
@@ -49,7 +49,7 @@ def main():
     parser.add_argument("--grad_accum", type=int, default=8,
                         help="Gradient accumulation steps")
     parser.add_argument("--output_dir", type=str,
-                        default="./emotion_gsrm_checkpoints")
+                        default="/home/azureuser/atik/speechRL_backup/emotion_gsrm_checkpoints")
     parser.add_argument("--dry_run", action="store_true",
                         help="Only prepare data and print command")
     parser.add_argument("--framework", type=str, default="swift",

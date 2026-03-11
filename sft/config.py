@@ -44,7 +44,7 @@ class TrainingConfig:
     torch_dtype: str = "bfloat16"
 
     # ---- Data ----
-    train_data_path: str = "./cot_synthesis_output/sft_training_data.jsonl"
+    train_data_path: str = "/home/azureuser/atik/speechRL_backup/meld_cot_output/sft_training_data.jsonl"
     val_data_path: str = ""
     val_split_ratio: float = 0.05
     max_length: int = 4096
@@ -72,8 +72,8 @@ class TrainingConfig:
 
     # ---- Framework ----
     framework: TrainingFramework = TrainingFramework.SWIFT
-    output_dir: str = "./emotion_gsrm_checkpoints"
-    logging_dir: str = "./emotion_gsrm_logs"
+    output_dir: str = "/home/azureuser/atik/speechRL_backup/emotion_gsrm_checkpoints"
+    logging_dir: str = "/home/azureuser/atik/speechRL_backup/emotion_gsrm_logs"
     save_strategy: str = "epoch"
     save_total_limit: int = 3
     eval_strategy: str = "epoch"
@@ -103,7 +103,6 @@ class TrainingConfig:
         args = {
             "model": self.model_name,
             "model_revision": self.model_revision,
-            "trust_remote_code": self.trust_remote_code,
             "torch_dtype": self.torch_dtype,
             "dataset": self.train_data_path,
             "max_length": self.max_length,
@@ -126,17 +125,17 @@ class TrainingConfig:
 
         if self.use_lora:
             args.update({
-                "sft_type": "lora",
+                "train_type": "lora",
                 "lora_rank": self.lora_rank,
                 "lora_alpha": self.lora_alpha,
                 "lora_dropout": self.lora_dropout,
             })
             if self.lora_target == LoRATarget.ALL_LINEAR:
-                args["lora_target_modules"] = "ALL"
+                args["target_modules"] = "all-linear"
             elif self.lora_target_modules:
-                args["lora_target_modules"] = self.lora_target_modules
+                args["target_modules"] = self.lora_target_modules
         else:
-            args["sft_type"] = "full"
+            args["train_type"] = "full"
 
         if self.val_data_path:
             args["val_dataset"] = self.val_data_path

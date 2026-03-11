@@ -46,7 +46,7 @@ Transcript + Context ───────────────────�
                                                               └───────────────────────┘
 ```
 
-**Training:** GPT-4o generates CoT reasoning from acoustic features + transcripts. Qwen2.5-Omni-7B learns to replicate this reasoning directly from raw audio.
+**Training:** GPT-4o generates CoT reasoning from acoustic features + transcripts. The student model learns to replicate this reasoning directly from raw audio.
 
 **Inference:** The student model takes raw audio, generates K=16 independent CoT responses at temperature 1.0 / top-p 0.6, and averages the parsed scores.
 
@@ -58,16 +58,17 @@ Transcript + Context ───────────────────�
 speechRL/
 ├── features/
 │   ├── __init__.py
-│   └── acoustic.py              # Acoustic feature extraction (748 lines)
+│   └── acoustic.py              # Acoustic feature extraction
 │                                  #   Prosodic (GSRM-retained), Voice Quality,
 │                                  #   Temporal, Formant features + normalization
 ├── rubric/
-│   └── __init__.py              # 7-dimension evaluation rubric (628 lines)
+│   ├── __init__.py              # (empty, reserved)
+│   └── init.py                  # 7-dimension evaluation rubric
 │                                  #   Scale anchors, prompt builders, score parsing
 ├── dataloader/
 │   ├── __init__.py
 │   ├── base.py                  # EmotionSample, BaseEmotionDataset, label maps
-│   ├── iemocap.py               # IEMOCAP loader (12hrs, categorical + VAD)
+│   ├── lemocap.py               # IEMOCAP loader (12hrs, categorical + VAD)
 │   ├── msp_podcast.py           # MSP-Podcast loader (100hrs, continuous VAD)
 │   ├── ravdess.py               # RAVDESS loader (7K recordings, controlled)
 │   └── meld.py                  # MELD loader (13K utterances, multi-party)
@@ -77,21 +78,23 @@ speechRL/
 │   ├── judgment.py              # Stage 2: global CoT judgment synthesis
 │   └── pipeline.py              # End-to-end synthesis orchestration
 ├── sft/
-│   ├── __init__.py
 │   ├── config.py                # TrainingConfig (all proposal hyperparameters)
 │   ├── dataset.py               # SFT dataset formatting + collator
 │   ├── trainer.py               # SWIFT / HuggingFace training backends
 │   └── inference.py             # K-sample averaging inference engine
-├── trail
-|   ├── step0_validate.py            # Pipeline validation (no API calls)
-|   ├── step1_synthesize.py          # CoT data synthesis runner
-|   ├── step2_train.py               # SFT training runner
-|   ├── step3_inference.py           # Inference & evaluation runner
-|   ├── requirements.txt
+├── trial/
+│   ├── step0_validate.py        # Pipeline validation (no API calls)
+│   ├── step1_synthesize.py      # CoT data synthesis runner (MELD)
+│   ├── step2_train.py           # SFT training runner
+│   └── step3_inference.py       # Inference & evaluation runner (MELD)
+├── meld_cot_output/             # Generated CoT training data (MELD, ~1278 samples)
+│   ├── checkpoint_meta.json
+│   ├── checkpoint.jsonl
+│   ├── cot_training_data.jsonl
+│   └── sft_training_data.jsonl
+├── emotion_gsrm_checkpoints/    # SFT training checkpoints
 └── README.md
 ```
-
-**Total: ~6,700 lines of Python across 23 files.**
 
 ---
 
@@ -100,31 +103,35 @@ speechRL/
 ### 1. Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install numpy librosa parselmouth soundfile openai transformers torch peft
 
 # For training (install separately):
 pip install ms-swift          # SWIFT framework
-pip install peft accelerate   # LoRA + distributed training
+pip install accelerate        # distributed training
 ```
 
-### 2. Download RAVDESS (Free, No License)
+### 2. Prepare MELD (Primary Dataset)
 
-Download from [Zenodo](https://zenodo.org/record/1188976) and extract:
+Download MELD from [GitHub](https://github.com/declare-lab/MELD) and extract:
 
 ```
-~/datasets/RAVDESS/
-└── Audio_Speech_Actors_01-24/
-    ├── Actor_01/
-    │   ├── 03-01-01-01-01-01-01.wav
-    │   └── ...
-    ├── Actor_02/
-    └── ...
+~/datasets/MELD.Raw/
+├── train/
+│   ├── train_sent_emo.csv
+│   └── train_splits/
+├── dev/
+│   ├── dev_sent_emo.csv
+│   └── dev_splits_complete/
+└── test/
+    ├── test_sent_emo.csv
+    └── test_splits_complete/
 ```
 
 ### 3. Validate the Pipeline
 
 ```bash
-python step0_validate.py --ravdess_dir ~/datasets/RAVDESS/Audio_Speech_Actors_01-24/
+# Uses RAVDESS for a lightweight, no-API-cost smoke test
+python trial/step0_validate.py --ravdess_dir ~/datasets/RAVDESS/Audio_Speech_Actors_01-24/
 ```
 
 This runs all components end-to-end on real audio with zero API calls. If it prints `ALL VALIDATION PASSED`, every dependency and data path is correct.
@@ -134,25 +141,29 @@ This runs all components end-to-end on real audio with zero API calls. If it pri
 ```bash
 export OPENAI_API_KEY=sk-your-key-here
 
-# Start small (20 samples, ~$1-2 in API costs)
-python step1_synthesize.py \
-    --ravdess_dir ~/datasets/RAVDESS/Audio_Speech_Actors_01-24/ \
-    --max_samples 20 \
+# Synthesize from MELD (default: 1280 samples)
+python trial/step1_synthesize.py \
+    --meld_dir ~/datasets/MELD.Raw \
+    --max_samples 100 \
     --batch \
-    --output_dir ./ravdess_cot_output
+    --output_dir ./meld_cot_output
 ```
+
+Output is written to `meld_cot_output/sft_training_data.jsonl`.
+
+**Cost estimate:** ~100 samples in batch evidence mode ≈ $1–2; full 1280-sample run ≈ $10–15.
 
 ### 5. Fine-tune the Model
 
 ```bash
 # Dry run first (prepares data, prints command, no GPU needed)
-python step2_train.py \
-    --data_path ./ravdess_cot_output/sft_training_data.jsonl \
+python trial/step2_train.py \
+    --data_path ./meld_cot_output/sft_training_data.jsonl \
     --dry_run
 
 # Run training (needs GPU)
-python step2_train.py \
-    --data_path ./ravdess_cot_output/sft_training_data.jsonl \
+python trial/step2_train.py \
+    --data_path ./meld_cot_output/sft_training_data.jsonl \
     --num_gpus 1 \
     --epochs 10
 ```
@@ -160,10 +171,11 @@ python step2_train.py \
 ### 6. Run Inference
 
 ```bash
-python step3_inference.py \
+python trial/step3_inference.py \
     --model_path ./emotion_gsrm_checkpoints \
-    --ravdess_dir ~/datasets/RAVDESS/Audio_Speech_Actors_01-24/ \
-    --k 16
+    --meld_dir ~/datasets/MELD.Raw \
+    --k 16 \
+    --output_path ./meld_results.jsonl
 ```
 
 ---
@@ -174,8 +186,8 @@ python step3_inference.py \
 |---------|------|--------|------|--------|
 | IEMOCAP | 12 hrs, 10K utt | Categorical + VAD (1-5) | Primary training | [USC license](https://sail.usc.edu/iemocap/iemocap_release.htm) |
 | MSP-Podcast | 100+ hrs, 60K+ seg | Continuous VAD (1-7), 5+ annotators | Supplementary + OOD test | [UT Dallas academic license](https://www.lab-msp.com/MSP/MSP-Podcast.html) |
-| RAVDESS | 7,356 recordings | 8 emotions, 2 intensities | Controlled ablation | [Open (Zenodo)](https://zenodo.org/record/1188976) |
-| MELD | 13K+ utterances | 7 emotions + sentiment | OOD evaluation | [Open (GitHub)](https://github.com/declare-lab/MELD) |
+| RAVDESS | 7,356 recordings | 8 emotions, 2 intensities | Controlled ablation + pipeline validation | [Open (Zenodo)](https://zenodo.org/record/1188976) |
+| MELD | 13K+ utterances | 7 emotions + sentiment | Primary CoT synthesis + OOD evaluation | [Open (GitHub)](https://github.com/declare-lab/MELD) |
 
 ---
 
@@ -207,7 +219,7 @@ All features undergo speaker-level z-normalization and quantile-based discretiza
 
 ## Evaluation Rubric
 
-Seven dimensions, each rated 1–5 with anchored descriptors:
+Seven dimensions, each rated 1–5 with anchored descriptors (defined in `rubric/init.py`):
 
 | Dimension | Measures | Key Acoustic Indicators |
 |-----------|----------|------------------------|
@@ -230,16 +242,18 @@ All hyperparameters follow the proposal specification:
 | Student model | Qwen2.5-Omni-7B |
 | Teacher model | GPT-4o |
 | Learning rate | 2×10⁻⁵ |
-| Effective batch size | 32 |
+| Effective batch size | 32 (4 per device × 8 grad accumulation) |
 | Epochs | 10 |
 | LoRA rank / alpha | 64 / 128 |
+| LoRA dropout | 0.05 |
 | LR scheduler | Cosine with 5% warmup |
 | Precision | BFloat16 |
 | Inference K | 16 samples averaged |
 | Inference temperature | 1.0 |
 | Inference top-p | 0.6 |
-| Framework | SWIFT (or HuggingFace fallback) |
-| Target training samples | 5K–7K |
+| Max sequence length | 4096 tokens |
+| Framework | SWIFT (HuggingFace fallback) |
+| Target training samples | 5K–7K (current: ~1,278 from MELD) |
 
 ---
 
@@ -262,12 +276,12 @@ All hyperparameters follow the proposal specification:
 ### Programmatic Usage
 
 ```python
-from emotion_gsrm.data.ravdess import RAVDESSDataset
-from emotion_gsrm.data.base import DatasetSplit
-from emotion_gsrm.features.acoustic import AcousticFeatureExtractor, FeatureNormalizer, format_features_for_prompt
+from dataloader.ravdess import RAVDESSDataset
+from dataloader.base import DatasetSplit
+from features.acoustic import AcousticFeatureExtractor, FeatureNormalizer, format_features_for_prompt
 
 # Load data
-dataset = RAVDESSDataset("./RAVDESS", split=DatasetSplit.TRAIN).load()
+dataset = RAVDESSDataset("./RAVDESS").load()
 sample = dataset[0]
 
 # Extract features
@@ -283,10 +297,22 @@ discretized = normalizer.discretize(normalized)
 prompt_text = format_features_for_prompt(features, discretized)
 ```
 
+### MELD with Conversational Context
+
+```python
+from dataloader.meld import MELDDataset
+from dataloader.base import DatasetSplit
+
+dataset = MELDDataset(root_dir="./MELD.Raw", split=DatasetSplit.TRAIN).load()
+sample = dataset[0]
+# sample.context_turns contains preceding dialogue turns
+```
+
 ### RAVDESS Controlled Pairs (for Ablation)
 
 ```python
-from emotion_gsrm.data.base import CategoricalEmotion
+from dataloader.ravdess import RAVDESSDataset
+from dataloader.base import DatasetSplit, CategoricalEmotion
 
 dataset = RAVDESSDataset("./RAVDESS", split=DatasetSplit.TRAIN).load()
 
@@ -311,7 +337,7 @@ intensity_pairs = dataset.get_intensity_pairs(CategoricalEmotion.ANGRY)
 | torch | PyTorch backend | Training & inference |
 | peft | LoRA adapters | Training |
 | ms-swift | SWIFT training framework | Training (recommended) |
-| datasets | HuggingFace datasets | Training (optional) |
+| accelerate | Distributed training | Training |
 | wandb | Experiment tracking | Training (optional) |
 
 ---

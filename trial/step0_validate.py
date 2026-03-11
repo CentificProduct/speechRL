@@ -79,18 +79,18 @@ def check_dependencies():
     print()
 
 
-def validate_ravdess_loading(ravdess_dir: str):
-    """Test RAVDESS data loader."""
+def validate_meld_loading(meld_dir: str):
     print("=" * 60)
-    print("STEP 0.2: Loading RAVDESS dataset")
+    print("STEP 0.2: Loading MELD dataset")
     print("=" * 60)
 
-    from dataloader.ravdess import RAVDESSDataset
+    from dataloader.meld import MELDDataset
     from dataloader.base import DatasetSplit
 
-    dataset = RAVDESSDataset(
-        root_dir=ravdess_dir,
-        split=DatasetSplit.TRAIN,
+    dataset = MELDDataset(
+        root_dir=meld_dir,
+        split=DatasetSplit.TEST,
+        require_audio=True,
     ).load()
 
     print(f"  Loaded {len(dataset)} samples")
@@ -99,25 +99,19 @@ def validate_ravdess_loading(ravdess_dir: str):
 
     if len(dataset) == 0:
         print("\nERROR: No samples loaded!")
-        print(f"Check that {ravdess_dir} contains Actor_01/ ... Actor_24/ subdirectories")
-        print("Expected structure:")
-        print("  RAVDESS/")
-        print("    Audio_Speech_Actors_01-24/")
-        print("      Actor_01/")
-        print("        03-01-01-01-01-01-01.wav")
+        print(f"Check that {meld_dir} contains test/test_sent_emo.csv and extracted audio")
         sys.exit(1)
 
-    # Show a sample
     sample = dataset[0]
     print(f"\n  Sample 0:")
     print(f"    ID: {sample.utterance_id}")
     print(f"    Audio: {sample.audio_path}")
     print(f"    Emotion: {sample.categorical_emotion}")
-    print(f"    Intensity: {sample.emotion_intensity}")
-    print(f"    Speaker: {sample.speaker_id} ({sample.gender})")
+    print(f"    Sentiment: {sample.sentiment}")
+    print(f"    Speaker: {sample.speaker_id}")
     print(f"    Transcript: {sample.transcript}")
+    print(f"    Context: {sample.context_turns}")
 
-    # Check audio file exists
     if Path(sample.audio_path).exists():
         print(f"    Audio file: EXISTS")
     else:
@@ -415,27 +409,27 @@ def validate_training_config():
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Validate Emotion-GSRM pipeline with RAVDESS data"
+        description="Validate Emotion-GSRM pipeline with MELD data"
     )
     parser.add_argument(
-        "--ravdess_dir",
+        "--meld_dir",
         type=str,
         # required=True,
-        default='/home/azureuser/atik/speechRL/datasets/RAVDESS',
-        help="Path to RAVDESS dataset directory (containing Actor_XX subdirs)",
+        default='/home/azureuser/atik/speechRL_backup/datasets/MELD.Raw',
+        help="Path to MELD dataset directory (containing subdirs)",
     )
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
     print("  Emotion-GSRM Pipeline Validation")
-    print("  Using RAVDESS dataset")
+    print("  Using MELD dataset")
     print("=" * 60 + "\n")
 
     start = time.time()
 
     # Run all validation steps
     check_dependencies()
-    dataset = validate_ravdess_loading(args.ravdess_dir)
+    dataset = validate_meld_loading(args.meld_dir)
     feature_sets = validate_feature_extraction(dataset)
     normalized, discretized, prompt_text = validate_normalization(feature_sets)
     validate_rubric()

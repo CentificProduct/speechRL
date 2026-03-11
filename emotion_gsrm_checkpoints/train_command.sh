@@ -1,13 +1,12 @@
 #!/bin/bash
 # Emotion-GSRM Training Command
-# Generated: 2026-03-10 15:24:23
+# Generated: 2026-03-11 15:42:33
 
 swift sft \
   --model Qwen/Qwen2.5-7B-Instruct \
   --model_revision main \
-  --trust_remote_code true \
   --torch_dtype bfloat16 \
-  --dataset emotion_gsrm_checkpoints/swift_train.jsonl \
+  --dataset /home/azureuser/atik/speechRL_backup/emotion_gsrm_checkpoints/swift_train.jsonl \
   --max_length 4096 \
   --learning_rate 2e-05 \
   --num_train_epochs 100 \
@@ -18,16 +17,16 @@ swift sft \
   --max_grad_norm 1.0 \
   --lr_scheduler_type cosine \
   --seed 42 \
-  --output_dir ./emotion_gsrm_checkpoints \
-  --logging_dir ./emotion_gsrm_logs \
+  --output_dir /home/azureuser/atik/speechRL_backup/emotion_gsrm_checkpoints \
+  --logging_dir /home/azureuser/atik/speechRL_backup/emotion_gsrm_logs \
   --save_strategy epoch \
   --save_total_limit 3 \
   --logging_steps 10 \
   --bf16 true \
-  --sft_type lora \
+  --train_type lora \
   --lora_rank 64 \
   --lora_alpha 128 \
   --lora_dropout 0.05 \
-  --lora_target_modules ALL \
-  --val_dataset emotion_gsrm_checkpoints/val_swift_train.jsonl \
+  --target_modules all-linear \
+  --val_dataset /home/azureuser/atik/speechRL_backup/emotion_gsrm_checkpoints/val_swift_train.jsonl \
   --eval_strategy epoch

@@ -1,6 +1,8 @@
 # Datasets - do not commit
 datasets/
 *.data
+*.jsonl
+*.json
 
 emotion_gsrm_checkpoints/v*
 

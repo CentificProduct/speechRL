@@ -6,18 +6,21 @@ Generates chain-of-thought training data using GPT-4o as teacher.
 
 Usage:
     export OPENAI_API_KEY=sk-...
-    python step1_synthesize.py --ravdess_dir /path/to/RAVDESS
+    python step1_synthesize.py --meld_dir /path/to/MELD.Raw
 
 Options:
     --max_samples N     Number of samples to synthesize (default: 100 for testing)
     --batch             Use batch evidence mode (1 API call per sample instead of 7)
-    --output_dir DIR    Output directory (default: ./ravdess_cot_output)
+    --output_dir DIR    Output directory (default: ./meld_cot_output)
 
 Cost estimate:
     ~100 samples with per-dimension evidence = ~700 Stage 1 calls + 100 Stage 2 calls
     At GPT-4o pricing (~$2.50/1M input, $10/1M output), expect ~$5-10 for 100 samples
     Use --batch mode to cut Stage 1 cost by ~5x
 """
+
+import warnings
+warnings.filterwarnings("ignore")
 
 import sys
 from pathlib import Path
@@ -29,13 +32,14 @@ import os
 import sys
 import time
 from pathlib import Path
+from dataloader.meld import MELDDataset
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler("step1_synthesis.log"),
+        logging.FileHandler("/home/azureuser/atik/speechRL_backup/meld_cot_output/step1_synthesis.log"),
     ],
 )
 logger = logging.getLogger("step1")
@@ -43,10 +47,10 @@ logger = logging.getLogger("step1")
 
 def main():
     parser = argparse.ArgumentParser(description="CoT synthesis with RAVDESS")
-    parser.add_argument("--ravdess_dir", type=str, default='/home/azureuser/atik/speechRL/datasets/RAVDESS')
+    parser.add_argument("--meld_dir", type=str, default='/home/azureuser/atik/speechRL_backup/datasets/MELD.Raw')  # Update to your MELD path
     parser.add_argument("--max_samples", type=int, default=1280)
     parser.add_argument("--batch", action="store_true", help="Batch evidence mode")
-    parser.add_argument("--output_dir", type=str, default="./ravdess_cot_output")
+    parser.add_argument("--output_dir", type=str, default="/home/azureuser/atik/speechRL_backup/meld_cot_output")
     parser.add_argument("--api_key", type=str, default="ollama")
     args = parser.parse_args()
 
@@ -62,12 +66,11 @@ def main():
     from dataloader.base import DatasetSplit
     from cot.pipeline import CoTSynthesisPipeline, PipelineConfig
 
-    # Load RAVDESS
-    logger.info(f"Loading RAVDESS from {args.ravdess_dir}")
-    dataset = RAVDESSDataset(
-        root_dir=args.ravdess_dir,
+    # Load MELD
+    logger.info(f"Loading MELD from {args.meld_dir}")
+    dataset = MELDDataset(
+        root_dir=args.meld_dir,
         split=DatasetSplit.TRAIN,
-        speech_only=True,
     ).load()
     logger.info(f"Loaded {len(dataset)} samples")
     logger.info(f"Emotion distribution: {dataset.emotion_distribution}")

@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Optional
 from collections import defaultdict
 
-from emotion_gsrm.data.base import (
+from dataloader.base import (
     BaseEmotionDataset,
     CategoricalEmotion,
     DatasetSplit,
@@ -168,12 +168,19 @@ class MELDDataset(BaseEmotionDataset):
                     emotion_raw, CategoricalEmotion.OTHER
                 )
 
-                audio_path = ""
-                if audio_dir:
-                    wav_name = f"dia{dialogue_id}_utt{utterance_id}.wav"
-                    wav_path = audio_dir / wav_name
-                    if wav_path.exists():
-                        audio_path = str(wav_path)
+                # audio_path = ""
+                # if audio_dir:
+                #     wav_name = f"dia{dialogue_id}_utt{utterance_id}.wav"
+                #     wav_path = audio_dir / wav_name
+                #     if wav_path.exists():
+                #         audio_path = str(wav_path)
+
+                for ext in [".wav", ".mp4"]:
+                    file_name = f"dia{dialogue_id}_utt{utterance_id}{ext}"
+                    file_path = audio_dir / file_name
+                    if file_path.exists():
+                        audio_path = str(file_path)
+                        break
 
                 entry = {
                     "dialogue_id": dialogue_id,
